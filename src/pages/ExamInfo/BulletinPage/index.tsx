@@ -31,6 +31,7 @@ type BulletinPageProps = {
 }
 export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
+  const [selectedText, setSelectedText] = useState('')
   const tagList = (): string[] => {
     if (mode === 'examinfo') return examinfoTagList
     if (mode === 'suggest') return suggestTagList
@@ -39,30 +40,29 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [isSelecting, setIsSelecting] = useState<boolean>(false)
   const [selectedTag, setSelectedTag] = useState<string>('선택해주세요')
-  const onEditorStateChange = (editorState: EditorState) => {
-    setEditorState(editorState)
-  }
+
   const [inputValue, setInputValue] = useState<string>('')
-  const [suggestInput, setSuggestInput] = useState<string>('')
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setInputValue(event.target.value)
   }
   const navigate = useNavigate()
   const onClickRegisterButton = async () => {
-    if (inputValue === '' || (mode === 'examinfo' && selectedTag === '선택해주세요')) return
-    if (mode === 'examinfo') {
-      await createPost({
-        content: serializeContent(editorState),
-        tagList: [selectedTag],
-        title: inputValue,
-      }).then((res) => {
-        navigate(-1)
-      })
-      return
-    }
+    // if (inputValue === '' || (mode === 'examinfo' && selectedTag === '선택해주세요')) return
+    // if (mode === 'examinfo') {
+    //   await createPost({
+    //     content: serializeContent(editorState),
+    //     tagList: [selectedTag],
+    //     title: inputValue,
+    //   }).then((res) => {
+    //     navigate(-1)
+    //   })
+    //   return
+    // }
   }
   const [value, setValue] = useState('**내용을 입력해 주세요**')
-
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
   const onClickCancelButton = () => {
     navigate(-1)
   }
@@ -78,13 +78,11 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const onClickRoot = () => {
     setIsSelecting(false)
   }
-  const onSuggestInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSuggestInput(e.target.value)
-  }
 
   const onTextSelected = () => {
     const selection = window.getSelection()
     if (selection && selection.toString().length > 0) {
+      setSelectedText(selection.toString())
       setIsModalOpen(true) // 모달창을 보여줍니다.
     }
   }
@@ -138,16 +136,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         </CancelButton>
         <OrangeButton content="등록" />
       </ButtonWrapper>
-      {isModalOpen && (
-        <DeleteCommentModal
-          closeModal={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          deleteComment={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-        />
-      )}
+      {isModalOpen && <DeleteCommentModal closeModal={closeModal} content={selectedText} />}
     </Root>
   )
 }

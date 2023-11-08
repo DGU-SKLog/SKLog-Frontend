@@ -4,8 +4,8 @@ export const Root = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 320px;
-  height: 240px;
+  width: 800px;
+  height: 500px;
   border-radius: 8px;
   transform: translate(-50%, -50%);
   display: flex;

@@ -4,12 +4,13 @@ import { GreenButton, ModalExitButton, ModalFooter, ModalWrapper, WhiteButton } 
 
 type DeleteCommentModalProps = {
   closeModal: () => void
-  deleteComment: () => void
+  content: string
+  // deleteComment: () => void
 }
 
-export const DeleteCommentModal: FC<DeleteCommentModalProps> = ({ closeModal, deleteComment }) => {
+export const DeleteCommentModal: FC<DeleteCommentModalProps> = ({ closeModal, content }) => {
   const onClickDeleteButton = () => {
-    deleteComment()
+    // deleteComment()
   }
   const onClickModal = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -19,8 +20,7 @@ export const DeleteCommentModal: FC<DeleteCommentModalProps> = ({ closeModal, de
       <Root onClick={onClickModal}>
         <UpperTypo>댓글 삭제</UpperTypo>
         <CenterTypoWrapper>
-          <CenterTypo>해당 댓글을</CenterTypo>
-          <CenterTypo>삭제하시겠어요?</CenterTypo>
+          <CenterTypo>{content}</CenterTypo>
         </CenterTypoWrapper>
         <ModalFooter>
           <GreenButton onClick={onClickDeleteButton}>삭제</GreenButton>

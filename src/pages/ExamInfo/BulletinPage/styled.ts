@@ -47,7 +47,7 @@ export const TagSelectorWrapper = styled.div`
   align-items: center;
   column-gap: 8px;
   cursor: pointer;
-  z-index: 100;
+  z-index: 3;
   margin-left: 24px;
 `
 export const TagTypo = styled.p`
