@@ -5,17 +5,9 @@ export const Root = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 35px 160px 102px;
+  padding: 30px 160px 0px;
   row-gap: 24px;
-  .editor {
-    outline: none;
-    box-sizing: border-box;
-    padding: 0 14px;
-    border: 1px solid #c6c6c6;
-    border-radius: 8px;
-    max-width: 1120px;
-    min-height: 200px;
-  }
+  overflow: hidden;
 `
 export const WriteTypo = styled.div`
   font-size: 21px;
@@ -23,11 +15,7 @@ export const WriteTypo = styled.div`
   line-height: 26px;
   margin-bottom: 4px;
 `
-export const SuggestTypo = styled.div`
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 15px;
-`
+
 export const GreenTypo = styled.span`
   color: #01cb45;
   font-size: 12px;
@@ -149,23 +137,4 @@ export const ContentInput = styled.textarea`
   border-radius: 8px;
   width: 1120px;
   height: 535px;
-`
-
-export const SuggestInput = styled.textarea`
-  outline: none;
-  box-sizing: border-box;
-  padding: 14px;
-  border: 1px solid #c6c6c6;
-  border-radius: 8px;
-  max-width: 1120px;
-  min-width: 528px;
-  min-height: 500px;
-  height: auto;
-  &::placeholder {
-    color: #c6c6c6;
-  }
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 18px;
-  color: #444444;
 `

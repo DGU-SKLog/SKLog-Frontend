@@ -22,7 +22,7 @@ export const routerInfo = [
         <Root>
           <BulletinPage mode={'examinfo'} />
         </Root>
-        <FooterSection />
+        {/* <FooterSection /> */}
       </>
     ),
     children: [

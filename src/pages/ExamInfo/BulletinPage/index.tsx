@@ -7,7 +7,6 @@ import {
   DownArrowImg,
   GreenTypo,
   Root,
-  SuggestTypo,
   TagOption,
   TagOptionWrapper,
   TagSelector,
@@ -17,17 +16,13 @@ import {
   UpperWrapper,
   WriteTypo,
 } from './styled'
-import { createPost } from 'api/post/createPost'
+
 import { useNavigate } from 'react-router-dom'
-import { EditorState } from 'draft-js'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { serializeContent } from 'utils/wysiwyg'
 import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
-import { RequestModal } from 'components/RequestModal'
 import { SelectModal } from 'components/SelectModal'
-import { relative } from 'path'
 type BulletinPageProps = {
   mode: string
 }
@@ -86,18 +81,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
 
   return (
     <Root onClick={onClickRoot}>
-      <WriteTypo>
-        {mode === 'suggest' ? (
-          <>
-            건의사항 🚀
-            <SuggestTypo>
-              <GreenTypo>플랜메이트</GreenTypo>에게 하시고 싶으신 말씀이 있으시다면 언제든지 의견을 보내주세요!
-            </SuggestTypo>
-          </>
-        ) : (
-          '글쓰기 ✏️'
-        )}
-      </WriteTypo>
+      <WriteTypo>글쓰기 ✏️</WriteTypo>
 
       <UpperWrapper>
         <TitleInput name="title" value={inputValue} onChange={onChange} placeholder="제목을 입력해주세요" />
