@@ -1,3 +1,4 @@
+import MDEditor from '@uiw/react-md-editor'
 import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import {
   ButtonWrapper,
@@ -60,6 +61,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       return
     }
   }
+  const [value, setValue] = useState('**내용을 입력해 주세요**')
 
   const onClickCancelButton = () => {
     navigate(-1)
@@ -119,27 +121,8 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
           </TagSelectorWrapper>
         )}
       </UpperWrapper>
-      {mode === 'suggest' ? (
-        <SuggestInput placeholder="내용을 작성해주세요." onChange={onSuggestInputChange} value={suggestInput} />
-      ) : (
-        <Editor
-          wrapperClassName="wrapper-class"
-          editorClassName="editor"
-          toolbarClassName="toolbar-class"
-          toolbar={{
-            list: { inDropdown: true },
-            textAlign: { inDropdown: true },
-            link: { inDropdown: true },
-            history: { inDropdown: false },
-          }}
-          placeholder="내용을 작성해주세요"
-          localization={{
-            locale: 'ko',
-          }}
-          editorState={editorState}
-          onEditorStateChange={onEditorStateChange}
-        />
-      )}
+
+      <MDEditor value={value} onChange={setValue} data-color-mode="light" />
       <ButtonWrapper>
         <CancelButton onClick={onClickCancelButton}>
           <CancelImg />
