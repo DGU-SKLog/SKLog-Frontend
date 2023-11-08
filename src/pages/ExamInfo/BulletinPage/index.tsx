@@ -7,7 +7,6 @@ import {
   DownArrowImg,
   GreenTypo,
   Root,
-  SuggestInput,
   SuggestTypo,
   TagOption,
   TagOptionWrapper,
@@ -21,16 +20,17 @@ import {
 import { createPost } from 'api/post/createPost'
 import { useNavigate } from 'react-router-dom'
 import { EditorState } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { serializeContent } from 'utils/wysiwyg'
 import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
+import { DeleteCommentModal } from 'components/ExamInfo/DeleteModal/DeleteCommentModal'
 type BulletinPageProps = {
   mode: string
 }
 export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
   const tagList = (): string[] => {
     if (mode === 'examinfo') return examinfoTagList
     if (mode === 'suggest') return suggestTagList
@@ -81,6 +81,14 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const onSuggestInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setSuggestInput(e.target.value)
   }
+
+  const onTextSelected = () => {
+    const selection = window.getSelection()
+    if (selection && selection.toString().length > 0) {
+      setIsModalOpen(true) // 모달창을 보여줍니다.
+    }
+  }
+
   useEffect(() => {
     window.scrollTo({ top: 0 })
   }, [])
@@ -122,7 +130,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         )}
       </UpperWrapper>
 
-      <MDEditor value={value} onChange={setValue} data-color-mode="light" />
+      <MDEditor value={value} onChange={setValue} data-color-mode="light" onSelect={onTextSelected} />
       <ButtonWrapper>
         <CancelButton onClick={onClickCancelButton}>
           <CancelImg />
@@ -130,6 +138,16 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         </CancelButton>
         <OrangeButton content="등록" />
       </ButtonWrapper>
+      {isModalOpen && (
+        <DeleteCommentModal
+          closeModal={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+          deleteComment={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+        />
+      )}
     </Root>
   )
 }
