@@ -25,19 +25,22 @@ import { serializeContent } from 'utils/wysiwyg'
 import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
-import { RequestModal } from 'components/ExamInfo/RequestModal'
+import { RequestModal } from 'components/RequestModal'
+import { SelectModal } from 'components/SelectModal'
+import { relative } from 'path'
 type BulletinPageProps = {
   mode: string
 }
 export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
+  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const [selectedText, setSelectedText] = useState('')
   const tagList = (): string[] => {
     if (mode === 'examinfo') return examinfoTagList
     if (mode === 'suggest') return suggestTagList
     else return []
   }
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
   const [isSelecting, setIsSelecting] = useState<boolean>(false)
   const [selectedTag, setSelectedTag] = useState<string>('선택해주세요')
 
@@ -47,17 +50,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   }
   const navigate = useNavigate()
   const onClickRegisterButton = async () => {
-    // if (inputValue === '' || (mode === 'examinfo' && selectedTag === '선택해주세요')) return
-    // if (mode === 'examinfo') {
-    //   await createPost({
-    //     content: serializeContent(editorState),
-    //     tagList: [selectedTag],
-    //     title: inputValue,
-    //   }).then((res) => {
-    //     navigate(-1)
-    //   })
-    //   return
-    // }
+    //
   }
   const [value, setValue] = useState('**내용을 입력해 주세요**')
   const closeModal = () => {
@@ -81,15 +74,15 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
 
   const onTextSelected = () => {
     const selection = window.getSelection()
-    if (selection && selection.toString().length > 0) {
+    if (selection && selection.toString().length > 1) {
+      const range = selection.getRangeAt(0)
+      // 선택된 텍스트의 바로 아래에 모달을 띄우기 위한 위치를 계산합니다.
       setSelectedText(selection.toString())
       setIsModalOpen(true) // 모달창을 보여줍니다.
+    } else {
+      closeModal()
     }
   }
-
-  useEffect(() => {
-    window.scrollTo({ top: 0 })
-  }, [])
 
   return (
     <Root onClick={onClickRoot}>
@@ -128,7 +121,9 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         )}
       </UpperWrapper>
 
-      <MDEditor value={value} onChange={setValue} data-color-mode="light" onSelect={onTextSelected} />
+      <MDEditor value={value} onChange={setValue} data-color-mode="light" onSelect={onTextSelected} height={400} />
+      {isModalOpen && <SelectModal closeModal={closeModal} content={selectedText} />}
+
       <ButtonWrapper>
         <CancelButton onClick={onClickCancelButton}>
           <CancelImg />
@@ -136,7 +131,6 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         </CancelButton>
         <OrangeButton content="등록" />
       </ButtonWrapper>
-      {isModalOpen && <RequestModal closeModal={closeModal} content={selectedText} />}
     </Root>
   )
 }

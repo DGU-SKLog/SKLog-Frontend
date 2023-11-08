@@ -4,4 +4,4 @@ import Table from 'assets/images/select_items/table.svg'
 import Summary from 'assets/images/select_items/summary.svg'
 import List from 'assets/images/select_items/list.svg'
 
-export const SelectItemList = [Extend, Fix, Table, Summary, List]
+export const SelectItemList = [Table, List, Extend, Summary, Fix]

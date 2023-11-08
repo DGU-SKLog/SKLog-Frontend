@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import {
   ApplyButton,
   AskImg,
@@ -29,13 +29,19 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => 
   const onClickModal = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
+  const inputRef = useRef<HTMLInputElement>()
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
 
   return (
     <ModalWrapper onClick={closeModal}>
       <Root onClick={onClickModal}>
         <UpperContainer>
           <AskImg src={AskIcon} />
-          <RequestInput placeholder="AI에게 요청할 내용을 입력하세요!" />
+          <RequestInput placeholder="AI에게 요청할 내용을 입력하세요!" ref={inputRef} />
         </UpperContainer>
         <CenterContainer>
           <LeftContainer>{content}</LeftContainer>

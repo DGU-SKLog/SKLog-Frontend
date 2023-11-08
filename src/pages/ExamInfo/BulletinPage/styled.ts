@@ -5,7 +5,7 @@ export const Root = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 48px 160px 102px;
+  padding: 35px 160px 102px;
   row-gap: 24px;
   .editor {
     outline: none;
