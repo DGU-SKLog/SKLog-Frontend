@@ -25,7 +25,7 @@ import { serializeContent } from 'utils/wysiwyg'
 import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
-import { DeleteCommentModal } from 'components/ExamInfo/DeleteModal/DeleteCommentModal'
+import { DeleteCommentModal } from 'components/ExamInfo/DeleteCommentModal'
 type BulletinPageProps = {
   mode: string
 }

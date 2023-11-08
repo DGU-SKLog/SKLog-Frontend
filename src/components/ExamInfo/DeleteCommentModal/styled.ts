@@ -1,0 +1,120 @@
+import styled from 'styled-components'
+
+export const Root = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 500px;
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-color: white;
+  box-shadow: 0px 4px 10px 0px #00000024;
+  overflow: hidden;
+`
+export const UpperContainer = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  width: 100%;
+  height: 100px;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  border-bottom: 2px solid black;
+`
+export const AskImg = styled.img`
+  width: 50px;
+`
+export const RequestInput = styled.input`
+  width: 700px;
+  height: 60px;
+  border: 2px solid #cccccc;
+  border-radius: 15px;
+  font-size: 25px;
+  box-sizing: border-box;
+  padding: 18px 10px;
+`
+export const CenterContainer = styled.div`
+  display: flex;
+  flex-grow: 1; // 남은 공간을 모두 차지하도록 설정
+`
+export const LeftContainer = styled.div`
+  box-sizing: border-box;
+  padding: 25px;
+  width: 399px;
+  border-right: 1px solid black;
+  flex-basis: 0; // 늘어남 기준점을 0으로 설정
+  flex-grow: 1; // 빈 공간에 대해 동일한 비율로 늘어나도록 설정
+`
+export const RightContainer = styled.div`
+  box-sizing: border-box;
+  padding: 25px;
+  width: 400px;
+  position: relative;
+  flex-basis: 0; // 늘어남 기준점을 0으로 설정
+  flex-grow: 1; // 빈 공간에 대해 동일한 비율로 늘어나도록 설정
+`
+
+const ButtonFormat = styled.button`
+  width: 80px;
+  height: 50px;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`
+export const ButtonContainer = styled.div`
+  position: absolute;
+  transform: translate(-50%);
+  left: 50%;
+  bottom: 23px;
+  display: flex;
+  column-gap: 25px;
+  bottom: 25px;
+`
+export const ApplyButton = styled(ButtonFormat)`
+  border: 2px solid #7389c1;
+  background-color: #94b0f6;
+`
+export const CancelButton = styled(ButtonFormat)`
+  border: 2px solid #e57d7d;
+  background-color: #f69494;
+`
+export const ClearButton = styled(ButtonFormat)`
+  width: 100px;
+  border: 2px solid #91b2a0;
+  background-color: #adedbb;
+`
+export const UpperTypo = styled.p`
+  position: absolute;
+  top: 36px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #444444;
+`
+export const CenterTypoWrapper = styled.div`
+  position: absolute;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+export const CenterTypo = styled.p`
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 26px;
+`
+export const DescriptionTypo = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  color: #666666;
+  margin-top: 4px;
+`
