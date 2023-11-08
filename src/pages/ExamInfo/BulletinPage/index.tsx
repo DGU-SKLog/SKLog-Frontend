@@ -25,7 +25,7 @@ import { serializeContent } from 'utils/wysiwyg'
 import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
-import { DeleteCommentModal } from 'components/ExamInfo/DeleteCommentModal'
+import { RequestModal } from 'components/ExamInfo/RequestModal'
 type BulletinPageProps = {
   mode: string
 }
@@ -136,7 +136,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         </CancelButton>
         <OrangeButton content="등록" />
       </ButtonWrapper>
-      {isModalOpen && <DeleteCommentModal closeModal={closeModal} content={selectedText} />}
+      {isModalOpen && <RequestModal closeModal={closeModal} content={selectedText} />}
     </Root>
   )
 }

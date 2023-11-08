@@ -5,31 +5,31 @@ import {
   ButtonContainer,
   CancelButton,
   CenterContainer,
-  CenterTypo,
-  CenterTypoWrapper,
   ClearButton,
   LeftContainer,
   RequestInput,
   RightContainer,
   Root,
   UpperContainer,
-  UpperTypo,
 } from './styled'
-import { GreenButton, ModalExitButton, ModalFooter, ModalWrapper, WhiteButton } from 'components/common/commonStyle'
+import { ModalWrapper } from 'components/common/commonStyle'
 import AskIcon from 'assets/images/ask_icon.svg'
-type DeleteCommentModalProps = {
+type RequestModalProps = {
   closeModal: () => void
   content: string
-  // deleteComment: () => void
 }
 
-export const DeleteCommentModal: FC<DeleteCommentModalProps> = ({ closeModal, content }) => {
-  const onClickDeleteButton = () => {
-    // deleteComment()
+export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => {
+  const onClickApplyButton = () => {
+    // 적용 api
+  }
+  const onClickClearButton = () => {
+    //원래 상태로 초기화
   }
   const onClickModal = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
+
   return (
     <ModalWrapper onClick={closeModal}>
       <Root onClick={onClickModal}>
@@ -42,7 +42,7 @@ export const DeleteCommentModal: FC<DeleteCommentModalProps> = ({ closeModal, co
           <RightContainer>
             <ButtonContainer>
               <ApplyButton>적용</ApplyButton>
-              <CancelButton>취소</CancelButton>
+              <CancelButton onClick={closeModal}>취소</CancelButton>
               <ClearButton>새 질문</ClearButton>
             </ButtonContainer>
           </RightContainer>
