@@ -1,6 +1,7 @@
 import { HEADER_HEIGHT, HEADER_MAX_WIDTH, HEADER_MIN_WIDTH } from 'constants/layout'
 import styled from 'styled-components'
 import yellowCircle from 'assets/images/yellow_circle.png'
+import { COLOR_ORANGE } from 'constants/color'
 export const Root = styled.div`
   position: fixed;
   left: 50%;
@@ -41,7 +42,7 @@ export const GreetTypo = styled.p`
   cursor: pointer;
 `
 export const GreenTypo = styled.span`
-  color: #01cb45;
+  color: ${COLOR_ORANGE};
   text-decoration: underline;
 `
 
@@ -53,8 +54,6 @@ export const Notice = styled.p`
 `
 
 export const Logo = styled.img`
-  width: 104px;
-  height: 31px;
   margin-right: 56px;
 `
 

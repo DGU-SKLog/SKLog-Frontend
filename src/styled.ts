@@ -18,28 +18,3 @@ export const TagRoot = styled.span`
     content: '#';
   }
 `
-
-export const CheckImg = styled.img`
-  content: url(${greenCheckImg});
-  width: 9px;
-  height: 7px;
-  margin-right: 3px;
-`
-
-export const RegisterButton = styled.button`
-  width: 96px;
-  height: 32px;
-  border-radius: 100px;
-  border: 1px solid #01cb45;
-  color: #01cb45;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    ${CheckImg} {
-      content: url(${whiteCheckImg});
-    }
-    color: white;
-    background-color: #1db951;
-  }
-`

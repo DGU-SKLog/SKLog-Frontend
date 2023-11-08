@@ -23,9 +23,9 @@ import { EditorState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { serializeContent } from 'utils/wysiwyg'
-import { CheckImg, RegisterButton } from 'styled'
 import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
+import { OrangeButton } from 'components/common/OrangeButton'
 type BulletinPageProps = {
   mode: string
 }
@@ -145,10 +145,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
           <CancelImg />
           취소
         </CancelButton>
-        <RegisterButton onClick={onClickRegisterButton}>
-          <CheckImg />
-          등록
-        </RegisterButton>
+        <OrangeButton content="등록" />
       </ButtonWrapper>
     </Root>
   )

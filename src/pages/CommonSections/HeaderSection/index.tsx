@@ -13,7 +13,7 @@ import {
   PageList,
   LogoutTypo,
 } from './styled'
-import logo from 'assets/images/logo.png'
+import logo from 'assets/images/logo.svg'
 import { pageList } from 'constants/pageList'
 import { useLocation, useNavigate } from 'react-router-dom'
 

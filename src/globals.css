@@ -10,10 +10,12 @@ button {
   cursor: pointer;
   background-color: inherit;
 }
+
 input {
   outline: none;
   border: none;
 }
+
 textarea {
   outline: none;
   border: none;
