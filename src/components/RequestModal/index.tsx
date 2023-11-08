@@ -14,6 +14,8 @@ import {
 } from './styled'
 import { ModalWrapper } from 'components/common/commonStyle'
 import AskIcon from 'assets/images/ask_icon.svg'
+import ReactMarkDown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 type RequestModalProps = {
   closeModal: () => void
   content: string
@@ -44,8 +46,12 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => 
           <RequestInput placeholder="AI에게 요청할 내용을 입력하세요!" ref={inputRef} />
         </UpperContainer>
         <CenterContainer>
-          <LeftContainer>{content}</LeftContainer>
+          <LeftContainer>
+            <ReactMarkDown rehypePlugins={[rehypeRaw]}>{content}</ReactMarkDown>
+          </LeftContainer>
+
           <RightContainer>
+            <ReactMarkDown rehypePlugins={[rehypeRaw]}>API 응답</ReactMarkDown>
             <ButtonContainer>
               <ApplyButton>적용</ApplyButton>
               <CancelButton onClick={closeModal}>취소</CancelButton>
