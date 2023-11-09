@@ -10,9 +10,11 @@ type SelectModalProps = {
 export const SelectModal: FC<SelectModalProps> = ({ content, closeModal }) => {
   const selectItemList = SelectItemList
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false)
-  const onSelectItemClick = () => {
-    //
-    setIsRequestModalOpen(true)
+  const onSelectItemClick = (api: any) => () => {
+    api().then((res) => {
+      console.log(res)
+      setIsRequestModalOpen(true)
+    })
   }
   const closeModalAll = () => {
     closeModal()
@@ -25,7 +27,7 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal }) => {
   return (
     <Root onClick={onClickModal}>
       {selectItemList.map((item, index) => (
-        <SelectItem key={index} src={item} onClick={onSelectItemClick} />
+        <SelectItem key={index} src={item.uri} onClick={onSelectItemClick(item.api)} />
       ))}
       {isRequestModalOpen && <RequestModal closeModal={closeModalAll} content={content} />}
     </Root>

@@ -2,8 +2,6 @@ import { HeaderSection } from 'pages/CommonSections/HeaderSection'
 import { Outlet } from 'react-router-dom'
 import { Root } from 'styled'
 import { BulletinPage } from 'pages/ExamInfo/BulletinPage'
-import { FindAllPostResponseProps, findAll } from 'api/post/find/findAll'
-import { CheckPostResponseProps, checkPost } from 'api/post/checkPost'
 import { FooterSection } from 'pages/CommonSections/FooterSection'
 
 export const routerInfo = [
