@@ -81,8 +81,8 @@
       "",
       "}",
       "",
-      "export const ${TM_FILENAME_BASE}$1 = ({}: ${TM_FILENAME_BASE/^(.)(.*)$/${1:/upcase}${2}/}$1RequestProps) => {",
-      "  return axiosPOST('', {})",
+      "export const ${TM_FILENAME_BASE}$1 = (req: ${TM_FILENAME_BASE/^(.)(.*)$/${1:/upcase}${2}/}$1RequestProps) => {",
+      "  return axiosPOST('', req)",
       "}"
     ]
   },

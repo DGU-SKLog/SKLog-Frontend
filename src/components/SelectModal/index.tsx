@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { InvisibleModalWrapper, Root, SelectItem } from './styled'
+import { Root, SelectItem } from './styled'
 import { SelectItemList } from 'constants/selectItemList'
 import { RequestModal } from 'components/RequestModal'
 type SelectModalProps = {

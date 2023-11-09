@@ -1,4 +1,3 @@
-import { ModalWrapper } from 'components/common/commonStyle'
 import styled from 'styled-components'
 
 export const Root = styled.div`
@@ -14,12 +13,4 @@ export const Root = styled.div`
 export const SelectItem = styled.img`
   width: 43px;
   cursor: pointer;
-`
-export const InvisibleModalWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
 `
