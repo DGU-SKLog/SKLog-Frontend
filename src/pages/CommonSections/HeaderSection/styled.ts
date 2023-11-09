@@ -55,6 +55,7 @@ export const Notice = styled.p`
 
 export const Logo = styled.img`
   margin-right: 56px;
+  margin-bottom: 3px;
 `
 
 export const PageList = styled.div`
