@@ -29,7 +29,7 @@ export const AskImg = styled.img`
   width: 50px;
 `
 export const RequestInput = styled.input`
-  width: 700px;
+  width: 100%;
   height: 60px;
   border: 2px solid #cccccc;
   border-radius: 15px;
@@ -98,4 +98,8 @@ export const ClearButton = styled(ButtonFormat)`
   width: 100px;
   border: 2px solid #91b2a0;
   background-color: #adedbb;
+`
+export const RequestButton = styled(ButtonFormat)`
+  border: 2px solid #b0b0b0;
+  background-color: #d3d3d3;
 `

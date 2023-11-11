@@ -6,16 +6,21 @@ import { CommonRequestProps } from 'api/common/commonType'
 type SelectModalProps = {
   closeModal: () => void
   content: string
+  applyAIText: (content: string) => void
 }
 
-export const SelectModal: FC<SelectModalProps> = ({ content, closeModal }) => {
+export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAIText }) => {
   const selectItemList = SelectItemList
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false)
   const onSelectItemClick = (api: any, req: CommonRequestProps) => () => {
-    api(content).then((res) => {
-      console.log(res)
+    if (api)
+      api(content).then((res) => {
+        console.log(res)
+        setIsRequestModalOpen(true)
+      })
+    else {
       setIsRequestModalOpen(true)
-    })
+    }
   }
   const closeModalAll = () => {
     closeModal()
@@ -30,7 +35,7 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal }) => {
       {selectItemList.map((item, index) => (
         <SelectItem key={index} src={item.uri} onClick={onSelectItemClick(item.api, { content: content })} />
       ))}
-      {isRequestModalOpen && <RequestModal closeModal={closeModalAll} content={content} />}
+      {isRequestModalOpen && <RequestModal closeModal={closeModalAll} content={content} applyAIText={applyAIText} />}
     </Root>
   )
 }

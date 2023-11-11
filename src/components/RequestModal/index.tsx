@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import {
   ApplyButton,
   AskImg,
@@ -7,6 +7,7 @@ import {
   CenterContainer,
   ClearButton,
   LeftContainer,
+  RequestButton,
   RequestInput,
   RightContainer,
   Root,
@@ -19,11 +20,14 @@ import rehypeRaw from 'rehype-raw'
 type RequestModalProps = {
   closeModal: () => void
   content: string
+  applyAIText: (content: string) => void
 }
 
-export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => {
+export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText }) => {
   const onClickApplyButton = () => {
     // 적용 api
+    applyAIText(apiResponse)
+    closeModal()
   }
   const onClickClearButton = () => {
     //원래 상태로 초기화
@@ -31,6 +35,7 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => 
   const onClickModal = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
+  const [apiResponse, setApiResponse] = useState('API 응답')
   const inputRef = useRef<HTMLInputElement>()
   useEffect(() => {
     if (inputRef.current) {
@@ -44,6 +49,7 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => 
         <UpperContainer>
           <AskImg src={AskIcon} />
           <RequestInput placeholder="AI에게 요청할 내용을 입력하세요!" ref={inputRef} />
+          <RequestButton>요청</RequestButton>
         </UpperContainer>
         <CenterContainer>
           <LeftContainer>
@@ -51,9 +57,9 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content }) => 
           </LeftContainer>
 
           <RightContainer>
-            <ReactMarkDown rehypePlugins={[rehypeRaw]}>API 응답</ReactMarkDown>
+            <ReactMarkDown rehypePlugins={[rehypeRaw]}>{apiResponse}</ReactMarkDown>
             <ButtonContainer>
-              <ApplyButton>적용</ApplyButton>
+              <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
               <CancelButton onClick={closeModal}>취소</CancelButton>
               <ClearButton>새 질문</ClearButton>
             </ButtonContainer>

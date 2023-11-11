@@ -78,11 +78,15 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       closeModal()
     }
   }
+  const applyAIText = (content: string) => {
+    const updatedValue = value.replace(selectedText, content)
+    setValue(updatedValue)
+    closeModal()
+  }
 
   return (
     <Root onClick={onClickRoot}>
       <WriteTypo>글쓰기 ✏️</WriteTypo>
-
       <UpperWrapper>
         <TitleInput name="title" value={inputValue} onChange={onChange} placeholder="제목을 입력해주세요" />
         {mode !== 'notice' && (
@@ -106,7 +110,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       </UpperWrapper>
 
       <MDEditor value={value} onChange={setValue} data-color-mode="light" onSelect={onTextSelected} height={400} />
-      {isModalOpen && <SelectModal closeModal={closeModal} content={selectedText} />}
+      {isModalOpen && <SelectModal closeModal={closeModal} content={selectedText} applyAIText={applyAIText} />}
 
       <ButtonWrapper>
         <CancelButton onClick={onClickCancelButton}>

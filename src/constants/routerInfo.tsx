@@ -1,7 +1,7 @@
 import { HeaderSection } from 'pages/CommonSections/HeaderSection'
 import { Outlet } from 'react-router-dom'
 import { Root } from 'styled'
-import { BulletinPage } from 'pages/ExamInfo/BulletinPage'
+import { BulletinPage } from 'pages/BulletinPage'
 import { FooterSection } from 'pages/CommonSections/FooterSection'
 
 export const routerInfo = [
