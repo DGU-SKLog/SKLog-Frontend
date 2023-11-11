@@ -28,7 +28,9 @@ type BulletinPageProps = {
 }
 export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
+
   const [selectedText, setSelectedText] = useState('')
   const tagList = (): string[] => {
     if (mode === 'examinfo') return examinfoTagList
@@ -70,9 +72,9 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const onTextSelected = () => {
     const selection = window.getSelection()
     if (selection && selection.toString().length > 1) {
-      const range = selection.getRangeAt(0)
       // 선택된 텍스트의 바로 아래에 모달을 띄우기 위한 위치를 계산합니다.
       setSelectedText(selection.toString())
+      setModalPosition(mousePosition)
       setIsModalOpen(true) // 모달창을 보여줍니다.
     } else {
       closeModal()
@@ -84,6 +86,17 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
     closeModal()
   }
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
   return (
     <Root onClick={onClickRoot}>
       <WriteTypo>글쓰기 ✏️</WriteTypo>
@@ -110,7 +123,17 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       </UpperWrapper>
 
       <MDEditor value={value} onChange={setValue} data-color-mode="light" onSelect={onTextSelected} height={400} />
-      {isModalOpen && <SelectModal closeModal={closeModal} content={selectedText} applyAIText={applyAIText} />}
+      {isModalOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            left: `${modalPosition.x + 10}px`,
+            top: `${modalPosition.y + 10}px`,
+          }}
+        >
+          <SelectModal closeModal={closeModal} content={selectedText} applyAIText={applyAIText} />
+        </div>
+      )}
 
       <ButtonWrapper>
         <CancelButton onClick={onClickCancelButton}>
