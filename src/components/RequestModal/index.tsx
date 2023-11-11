@@ -22,10 +22,13 @@ type RequestModalProps = {
   closeModal: () => void
   content: string
   applyAIText: (content: string) => void
+  response: string | null
 }
 
-export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText }) => {
+export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText, response }) => {
   const [inputValue, setInputValue] = useState<string>('')
+  const [apiResponse, setApiResponse] = useState(response ?? '')
+  const inputRef = useRef<HTMLInputElement>()
   const onClickApplyButton = () => {
     // 적용 api
     applyAIText(apiResponse)
@@ -33,6 +36,8 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
   }
   const onClickClearButton = () => {
     setInputValue('')
+    setApiResponse('')
+    inputRef.current.focus()
   }
   const onClickRequestButton = () => {
     createRequest({ content: content, request: inputValue }).then((res: CreateRequestResponseProps) => {
@@ -45,11 +50,12 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
   const onClickModal = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
-  const [apiResponse, setApiResponse] = useState('API 응답')
-  const inputRef = useRef<HTMLInputElement>()
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
+    }
+    if (response) {
+      setApiResponse(response)
     }
   }, [])
 
