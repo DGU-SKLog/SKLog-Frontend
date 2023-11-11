@@ -11,6 +11,7 @@ export const Root = styled.div`
   justify-content: center;
   border: 2px solid black;
   border-radius: 10px;
+  background-color: white;
 `
 export const SelectItem = styled.img`
   margin-right: 13px;
