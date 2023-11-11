@@ -8,6 +8,13 @@ export const Root = styled.div`
   padding: 30px 160px 0px;
   row-gap: 24px;
   overflow: hidden;
+  .question_bubble:hover {
+    filter: brightness(0.8);
+  }
+  .question_bubble:active {
+    cursor: auto !important;
+    filter: brightness(0.6);
+  }
 `
 export const WriteTypo = styled.div`
   font-size: 21px;
@@ -137,4 +144,13 @@ export const ContentInput = styled.textarea`
   border-radius: 8px;
   width: 1120px;
   height: 535px;
+`
+export const QuestionBubble = styled.img`
+  position: fixed;
+  &:hover {
+    filter: brightness(1.2);
+  }
+  right: 30px;
+  bottom: 30px;
+  width: 80px;
 `

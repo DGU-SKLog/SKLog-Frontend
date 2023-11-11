@@ -5,7 +5,7 @@ import {
   CancelButton,
   CancelImg,
   DownArrowImg,
-  GreenTypo,
+  QuestionBubble,
   Root,
   TagOption,
   TagOptionWrapper,
@@ -23,11 +23,14 @@ import downArrowImg from 'assets/images/right_arrow.png'
 import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
 import { SelectModal } from 'components/SelectModal'
+import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_bubble.svg'
+import { QuestionModal } from 'components/QuestionModal'
 type BulletinPageProps = {
   mode: string
 }
 export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
+  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
 
@@ -67,6 +70,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   }
   const onClickRoot = () => {
     setIsSelecting(false)
+    setIsQuestionModalOpen(false)
   }
 
   const onTextSelected = () => {
@@ -142,6 +146,17 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         </CancelButton>
         <OrangeButton content="등록" />
       </ButtonWrapper>
+      <QuestionBubbleImg
+        fill="white"
+        stroke="black"
+        class="question_bubble"
+        onClick={(e: React.MouseEvent) => {
+          e.stopPropagation()
+          setIsQuestionModalOpen((prev) => !prev)
+        }}
+        style={{ position: 'fixed', right: 80, bottom: 30, cursor: 'pointer' }}
+      />
+      {isQuestionModalOpen && <QuestionModal closeModal={closeModal} />}
     </Root>
   )
 }
