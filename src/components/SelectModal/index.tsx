@@ -18,9 +18,13 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
   const onSelectItemClick = (api: any) => () => {
     if (api) {
       setIsRequestModalOpen(true)
-      api({ content: content }).then((res: CommonResponseProps) => {
-        setApiResponse(res.content)
-      })
+      api({ content: content })
+        .then((res: CommonResponseProps) => {
+          setApiResponse(res.content)
+        })
+        .catch((e) => {
+          setApiResponse('오류')
+        })
     } else {
       setIsRequestModalOpen(true)
     }
