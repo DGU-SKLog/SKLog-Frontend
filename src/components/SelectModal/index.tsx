@@ -16,12 +16,12 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
   const [apiResponse, setApiResponse] = useState('')
 
   const onSelectItemClick = (api: any) => () => {
-    if (api)
+    if (api) {
+      setIsRequestModalOpen(true)
       api({ content: content }).then((res: CommonResponseProps) => {
-        setIsRequestModalOpen(true)
         setApiResponse(res.content)
       })
-    else {
+    } else {
       setIsRequestModalOpen(true)
     }
   }
