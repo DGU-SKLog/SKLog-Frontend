@@ -149,7 +149,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       <QuestionBubbleImg
         fill="white"
         stroke="black"
-        class="question_bubble"
+        className="question_bubble"
         onClick={(e: React.MouseEvent) => {
           e.stopPropagation()
           setIsQuestionModalOpen((prev) => !prev)

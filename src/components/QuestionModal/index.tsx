@@ -24,10 +24,15 @@ export const QuestionModal: FC<QuestionModalProps> = ({ closeModal }) => {
     }
   }
   const onClickQuestionButton = () => {
-    setInputValue('')
-    createQuestion({ question: inputValue }).then((res: CreateQuestionResponseProps) => {
-      setApiResponse(res.answer)
-    })
+    createQuestion({ question: inputValue })
+      .then((res: CreateQuestionResponseProps) => {
+        setInputValue('')
+        setApiResponse(res.answer)
+      })
+      .catch((e) => {
+        setInputValue('')
+        setApiResponse('API 오류')
+      })
   }
   const onClickClearButton = () => {
     setApiResponse('')
