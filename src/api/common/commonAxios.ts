@@ -39,3 +39,8 @@ export const axiosDELETE = <RequestData, ResponseData>(
     .delete<ResponseData, AxiosResponse<ResponseData>, RequestData>(url, { params, ...options })
     .then((response) => response.data)
 }
+axiosInstance.interceptors.request.use((config: any) => {
+  const newConfig = { ...config }
+  console.log(newConfig)
+  return newConfig
+})

@@ -8,6 +8,7 @@ export const Root = styled.div`
   padding: 30px 160px 0px;
   row-gap: 24px;
   overflow: hidden;
+
   .question_bubble:hover {
     filter: brightness(0.8);
   }

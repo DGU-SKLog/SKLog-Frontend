@@ -3,6 +3,7 @@ import { Root, SelectItem } from './styled'
 import { SelectItemList } from 'constants/selectItemList'
 import { RequestModal } from 'components/RequestModal'
 import { CommonRequestProps, CommonResponseProps } from 'api/common/commonType'
+import { createEdit } from 'api/createEdit'
 type SelectModalProps = {
   closeModal: () => void
   content: string
@@ -16,10 +17,9 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
 
   const onSelectItemClick = (api: any) => () => {
     if (api)
-      api(content).then((res: CommonResponseProps) => {
+      api({ content: content }).then((res: CommonResponseProps) => {
         setIsRequestModalOpen(true)
         setApiResponse(res.content)
-        console.log(res)
       })
     else {
       setIsRequestModalOpen(true)
