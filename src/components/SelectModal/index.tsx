@@ -14,16 +14,19 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
   const selectItemList = SelectItemList
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false)
   const [apiResponse, setApiResponse] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSelectItemClick = (api: any) => () => {
     if (api) {
+      setIsLoading(true)
       setIsRequestModalOpen(true)
       api({ content: content })
         .then((res: CommonResponseProps) => {
+          setIsLoading(true)
           setApiResponse(res.content)
         })
         .catch((e) => {
-          setApiResponse('오류')
+          console.error(e)
         })
     } else {
       setIsRequestModalOpen(true)
@@ -43,7 +46,13 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
         <SelectItem key={index} src={item.uri} onClick={onSelectItemClick(item.api)} />
       ))}
       {isRequestModalOpen && (
-        <RequestModal closeModal={closeModalAll} content={content} applyAIText={applyAIText} response={apiResponse} />
+        <RequestModal
+          closeModal={closeModalAll}
+          content={content}
+          applyAIText={applyAIText}
+          response={apiResponse}
+          isLoading={isLoading}
+        />
       )}
     </Root>
   )

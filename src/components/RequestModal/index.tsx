@@ -18,14 +18,16 @@ import AskIcon from 'assets/images/ask_icon.svg'
 import ReactMarkDown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { CreateRequestResponseProps, createRequest } from 'api/createRequest'
+import { Spinner } from 'components/Spinner'
 type RequestModalProps = {
   closeModal: () => void
   content: string
   applyAIText: (content: string) => void
   response: string | null
+  isLoading: boolean
 }
 
-export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText, response }) => {
+export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText, response, isLoading }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [apiResponse, setApiResponse] = useState(response ?? '')
   const inputRef = useRef<HTMLInputElement>()
@@ -54,10 +56,12 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
     if (inputRef.current) {
       inputRef.current.focus()
     }
+  }, [])
+  useEffect(() => {
     if (response) {
       setApiResponse(response)
     }
-  }, [])
+  }, [response])
 
   return (
     <ModalWrapper onClick={closeModal}>
@@ -78,7 +82,7 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
           </LeftContainer>
 
           <RightContainer>
-            <ReactMarkDown rehypePlugins={[rehypeRaw]}>{apiResponse}</ReactMarkDown>
+            {isLoading ? <Spinner /> : <ReactMarkDown rehypePlugins={[rehypeRaw]}>{apiResponse}</ReactMarkDown>}
             <ButtonContainer>
               <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
               <CancelButton onClick={closeModal}>취소</CancelButton>
