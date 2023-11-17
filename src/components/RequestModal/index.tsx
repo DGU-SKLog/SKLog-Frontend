@@ -15,7 +15,8 @@ import {
 } from './styled'
 import { ModalWrapper } from 'components/common/commonStyle'
 import AskIcon from 'assets/images/ask_icon.svg'
-import ReactMarkDown from 'react-markdown'
+// import ReactMarkDown from 'react-markdown'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 import rehypeRaw from 'rehype-raw'
 import { CreateRequestResponseProps, createRequest } from 'api/createRequest'
 import { Spinner } from 'components/Spinner'
@@ -30,9 +31,9 @@ type RequestModalProps = {
 export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText, response, isLoading }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [apiResponse, setApiResponse] = useState(response ?? '')
+  const [isRequesting, setIsRequesting] = useState(false)
   const inputRef = useRef<HTMLInputElement>()
   const onClickApplyButton = () => {
-    // 적용 api
     applyAIText(apiResponse)
     closeModal()
   }
@@ -42,8 +43,11 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
     inputRef.current.focus()
   }
   const onClickRequestButton = () => {
+    if (inputValue == '') return
+    setIsRequesting(true)
     createRequest({ content: content, request: inputValue }).then((res: CreateRequestResponseProps) => {
       setApiResponse(res.content)
+      setIsRequesting(false)
     })
   }
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -78,11 +82,16 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
         </UpperContainer>
         <CenterContainer>
           <LeftContainer>
-            <ReactMarkDown rehypePlugins={[rehypeRaw]}>{content}</ReactMarkDown>
+            <MarkdownPreview source={content} wrapperElement={{ 'data-color-mode': 'light' }} />
           </LeftContainer>
 
           <RightContainer>
-            {isLoading ? <Spinner /> : <ReactMarkDown rehypePlugins={[rehypeRaw]}>{apiResponse}</ReactMarkDown>}
+            {isLoading || isRequesting ? (
+              <Spinner />
+            ) : (
+              <MarkdownPreview source={apiResponse} wrapperElement={{ 'data-color-mode': 'light' }} />
+            )}
+
             <ButtonContainer>
               <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
               <CancelButton onClick={closeModal}>취소</CancelButton>
