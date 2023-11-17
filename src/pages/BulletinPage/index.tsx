@@ -126,7 +126,14 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         )}
       </UpperWrapper>
 
-      <MDEditor value={value} onChange={setValue} data-color-mode="light" onSelect={onTextSelected} height={400} />
+      <MDEditor
+        value={value}
+        onChange={setValue}
+        data-color-mode="light"
+        onSelect={onTextSelected}
+        height={400}
+        visibleDragbar={false}
+      />
       {isModalOpen && (
         <div
           style={{

@@ -8,7 +8,12 @@ export const Root = styled.div`
   padding: 30px 160px 0px;
   row-gap: 24px;
   overflow: hidden;
-
+  .w-md-editor-bar {
+    .svg {
+      width: 0;
+      height: 0;
+    }
+  }
   .question_bubble:hover {
     filter: brightness(0.8);
   }
