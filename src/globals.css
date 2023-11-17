@@ -20,4 +20,5 @@ textarea {
   outline: none;
   border: none;
   resize: none;
+  font-size: 15px !important;
 }

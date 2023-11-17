@@ -133,6 +133,7 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
         onSelect={onTextSelected}
         height={400}
         visibleDragbar={false}
+        highlightEnable={false}
       />
       {isModalOpen && (
         <div
