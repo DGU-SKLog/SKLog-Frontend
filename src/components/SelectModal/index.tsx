@@ -2,8 +2,7 @@ import { FC, useState } from 'react'
 import { Root, SelectItem } from './styled'
 import { SelectItemList } from 'constants/selectItemList'
 import { RequestModal } from 'components/RequestModal'
-import { CommonRequestProps, CommonResponseProps } from 'api/common/commonType'
-import { createEdit } from 'api/createEdit'
+import { CommonResponseProps } from 'api/common/commonType'
 type SelectModalProps = {
   closeModal: () => void
   content: string

@@ -58,6 +58,7 @@ export const RightContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  position: relative;
   box-sizing: border-box;
   padding: 25px;
   width: 400px;
@@ -83,8 +84,8 @@ export const ButtonContainer = styled.div`
   left: 50%;
   bottom: 23px;
   display: flex;
+  justify-content: center;
   column-gap: 25px;
-  bottom: 25px;
 `
 export const ApplyButton = styled(ButtonFormat)`
   border: 2px solid #7389c1;
@@ -103,3 +104,20 @@ export const RequestButton = styled(ButtonFormat)`
   border: 2px solid #b0b0b0;
   background-color: #d3d3d3;
 `
+export const EditButton = styled.img`
+  position: absolute;
+  width: 20px;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+`
+export const EditInput = styled.textarea`
+  width: 100%;
+  height: 100%;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  font-size: 16px;
+  line-height: 24px;
+`
+export const ApplyEditButton = styled(ApplyButton)``

@@ -1,11 +1,14 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import {
   ApplyButton,
+  ApplyEditButton,
   AskImg,
   ButtonContainer,
   CancelButton,
   CenterContainer,
   ClearButton,
+  EditButton,
+  EditInput,
   LeftContainer,
   RequestButton,
   RequestInput,
@@ -27,20 +30,25 @@ type RequestModalProps = {
   response: string | null
   isLoading: boolean
 }
-
+import fixImg from 'assets/images/select_items/fix.svg'
 export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, applyAIText, response, isLoading }) => {
   const [inputValue, setInputValue] = useState<string>('')
-  const [apiResponse, setApiResponse] = useState(response ?? '')
+  const [apiResponse, setApiResponse] = useState('')
   const [isRequesting, setIsRequesting] = useState(false)
-  const inputRef = useRef<HTMLInputElement>()
+  const [isEditButtonShown, setIsEditButtonShown] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const requestInputRef = useRef<HTMLInputElement>()
+  const EditInputRef = useRef<HTMLTextAreaElement>()
+  const [editValue, setEditValue] = useState(apiResponse)
   const onClickApplyButton = () => {
     applyAIText(apiResponse)
     closeModal()
   }
   const onClickClearButton = () => {
+    if (isEditing) return
     setInputValue('')
     setApiResponse('')
-    inputRef.current.focus()
+    requestInputRef.current.focus()
   }
   const onClickRequestButton = () => {
     if (inputValue == '') return
@@ -56,16 +64,47 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
   const onClickModal = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
+  const onRightContainerMouseOver = () => {
+    setIsEditButtonShown(true)
+  }
+  const onRightContainerMouseLeave = () => {
+    setIsEditButtonShown(false)
+  }
+  const onClickEditButton = () => {
+    setIsEditing(true)
+  }
+  const onEditValueChange = (e: ChangeEvent<HTMLTextAreaElement>): void => {
+    setEditValue(e.target.value)
+  }
+  const onClickApplyEditButton = () => {
+    if (isLoading) return
+    setApiResponse(editValue)
+    setIsEditing(false)
+  }
+  const onClickCancelButton = () => {
+    if (isEditing) {
+      setIsEditing(false)
+      setEditValue(apiResponse)
+    } else {
+      closeModal()
+    }
+  }
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus()
+    if (requestInputRef.current) {
+      requestInputRef.current.focus()
     }
   }, [])
   useEffect(() => {
-    if (response) {
-      setApiResponse(response)
-    }
+    if (response) setApiResponse(response)
   }, [response])
+
+  useEffect(() => {
+    if (isEditing) EditInputRef?.current?.focus()
+  }, [isEditing])
+
+  useEffect(() => {
+    setEditValue(apiResponse)
+  }, [apiResponse])
 
   return (
     <ModalWrapper onClick={closeModal}>
@@ -74,7 +113,7 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
           <AskImg src={AskIcon} />
           <RequestInput
             placeholder="AI에게 요청할 내용을 입력하세요!"
-            ref={inputRef}
+            ref={requestInputRef}
             value={inputValue}
             onChange={onChange}
           />
@@ -85,16 +124,25 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
             <MarkdownPreview source={content} wrapperElement={{ 'data-color-mode': 'light' }} />
           </LeftContainer>
 
-          <RightContainer>
+          <RightContainer onMouseOver={onRightContainerMouseOver} onMouseLeave={onRightContainerMouseLeave}>
+            {!isEditing && isEditButtonShown && !(isLoading || isRequesting) && apiResponse != '' && (
+              <EditButton src={fixImg} onClick={onClickEditButton} />
+            )}
             {isLoading || isRequesting ? (
               <Spinner />
+            ) : isEditing ? (
+              <EditInput value={editValue} onChange={onEditValueChange} ref={EditInputRef} />
             ) : (
               <MarkdownPreview source={apiResponse} wrapperElement={{ 'data-color-mode': 'light' }} />
             )}
 
             <ButtonContainer>
-              <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
-              <CancelButton onClick={closeModal}>취소</CancelButton>
+              {isEditing ? (
+                <ApplyEditButton onClick={onClickApplyEditButton}>수정</ApplyEditButton>
+              ) : (
+                <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
+              )}
+              <CancelButton onClick={onClickCancelButton}>취소</CancelButton>
               <ClearButton onClick={onClickClearButton}>새 질문</ClearButton>
             </ButtonContainer>
           </RightContainer>
