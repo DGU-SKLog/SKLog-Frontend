@@ -23,6 +23,7 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
         .then((res: CommonResponseProps) => {
           setIsLoading(true)
           setApiResponse(res.content)
+          console.log(res)
         })
         .catch((e) => {
           console.error(e)
