@@ -21,7 +21,7 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
       setIsRequestModalOpen(true)
       api({ content: content })
         .then((res: CommonResponseProps) => {
-          setIsLoading(true)
+          setIsLoading(false)
           setApiResponse(res.content)
           console.log(res)
         })
