@@ -73,6 +73,7 @@ export const LowerContainer = styled.div`
   flex-basis: 0; // 늘어남 기준점을 0으로 설정
   flex-grow: 1; // 빈 공간에 대해 동일한 비율로 늘어나도록 설정
   overflow-y: scroll;
+  white-space: pre-line;
 `
 
 export const ClearButton = styled.button`
