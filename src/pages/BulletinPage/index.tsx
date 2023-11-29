@@ -7,6 +7,8 @@ import {
   CancelButton,
   CancelImg,
   HashTagContainer,
+  IconWrapper,
+  RobotIcon,
   Root,
   TitleInput,
   UpperWrapper,
@@ -20,26 +22,29 @@ import { SelectModal } from 'components/SelectModal'
 import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_bubble.svg'
 import { QuestionModal } from 'components/QuestionModal'
 import { HashTag } from 'components/HashTag'
+import RobotIconImg from 'assets/images/robot.svg'
+import { CreateTitleResponseProps, createTitle } from 'api/createTitle'
+import { Spinner } from 'components/Spinner'
 type BulletinPageProps = {
   mode: string
 }
 export const BulletinPage: FC<BulletinPageProps> = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
   const [selectedText, setSelectedText] = useState('')
-
-  const [inputValue, setInputValue] = useState<string>('')
+  const [titleValue, setTitleValue] = useState<string>('')
   const [hashTagList, setHashTagList] = useState<Array<string>>([])
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value)
+    setTitleValue(event.target.value)
   }
   const navigate = useNavigate()
   const onClickRegisterButton = async () => {
     //
   }
-  const [value, setValue] = useState('**내용을 입력해 주세요**')
+  const [contentValue, setValue] = useState('**내용을 입력해 주세요**')
   const closeModal = () => {
     setIsModalOpen(false)
   }
@@ -64,7 +69,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   }
 
   const applyAIText = (content: string) => {
-    const updatedValue = value.replace(selectedText, content)
+    const updatedValue = contentValue.replace(selectedText, content)
     setValue(updatedValue)
     closeModal()
   }
@@ -79,7 +84,21 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
       })
     )
   }
-
+  const onClickRobotIcon = () => {
+    setIsLoading(true)
+    createTitle({
+      content: titleValue,
+    })
+      .then((res: CreateTitleResponseProps) => {
+        setTitleValue(res.title)
+        setHashTagList(res.tags)
+        setIsLoading(false)
+      })
+      .catch((e) => {
+        setIsLoading(true)
+        setTitleValue(e)
+      })
+  }
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
@@ -92,18 +111,21 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(hashTagList)
-  }, [hashTagList])
+  // useEffect(() => {
+  //   console.log(hashTagList)
+  // }, [hashTagList])
   return (
     <Root onClick={onClickRoot}>
       <WriteTypo>글쓰기 ✏️</WriteTypo>
       <UpperWrapper>
-        <TitleInput name="title" value={inputValue} onChange={onChange} placeholder="제목을 입력해주세요" />
+        <TitleInput name="title" value={titleValue} onChange={onChange} placeholder="제목을 입력해주세요" />
+        <IconWrapper>
+          {isLoading ? <Spinner /> : <RobotIcon src={RobotIconImg} alt="robot_icon" onClick={onClickRobotIcon} />}
+        </IconWrapper>
       </UpperWrapper>
 
       <MDEditor
-        value={value}
+        value={contentValue}
         onChange={setValue}
         data-color-mode="light"
         onSelect={onTextSelected}
@@ -125,8 +147,8 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
       <ButtonContainer>
         <HashTagContainer>
           <AddHashTagButton onClick={addHashTag}>#</AddHashTagButton>
-          {hashTagList.map((tagName, index) => (
-            <HashTag key={index} tagName={tagName} onChange={(newTagName: string) => editHashTag(index, newTagName)} />
+          {hashTagList.map((tag, index) => (
+            <HashTag key={index} onChange={(newTagName: string) => editHashTag(index, newTagName)} />
           ))}
         </HashTagContainer>
         <ButtonWrapper>

@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import cancelImg from 'assets/images/cancel.png'
-
+type RobotIconProps = {
+  isRobotHovered: boolean
+}
 export const Root = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,6 +38,7 @@ export const ButtonWrapper = styled.div`
   column-gap: 8px;
 `
 export const UpperWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -112,4 +115,18 @@ export const AddHashTagButton = styled.button`
   color: gray;
   transform: rotate(15deg);
   margin-right: 5px;
+`
+export const RobotIcon = styled.img`
+  width: 30px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
+  &:active {
+    opacity: 1;
+  }
+`
+export const IconWrapper = styled.div`
+  position: absolute;
+  right: 15px;
 `

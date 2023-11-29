@@ -2,11 +2,10 @@ import { ChangeEvent, FC, ReactNode, useEffect, useRef, useState } from 'react'
 import { CancelButton, ButtonRoot, TagInput } from './styled'
 import CancelImg from 'assets/images/cancel.png'
 type HashTagProps = {
-  tagName: string
   onChange: (newTagName: string) => void
 }
 
-export const HashTag: FC<HashTagProps> = ({ tagName, onChange }) => {
+export const HashTag: FC<HashTagProps> = ({ onChange }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
   const onKeydown = (e: React.KeyboardEvent) => {
