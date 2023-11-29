@@ -43,7 +43,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   const [selectedText, setSelectedText] = useState('')
   const [titleValue, setTitleValue] = useState<string>('')
   const [hashTagList, setHashTagList] = useState<Array<HashTagType>>([])
-  const defaultValue = 'HashTag'
+  const defaultValue = ''
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitleValue(event.target.value)
   }

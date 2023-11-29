@@ -11,16 +11,11 @@ type HashTagProps = {
 export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, deleteHashTag }) => {
   const [isEditing, setIsEditing] = useState<boolean>(true)
 
-  const onKeydown = (e: React.KeyboardEvent) => {
+  const onKeyPress = (e: React.KeyboardEvent) => {
     if (inputRef.current.innerText == defaultValue) {
       inputRef.current.innerText = ''
     }
     if (e.key == ',' || e.key == 'Enter') {
-      inputRef.current.disabled = true
-      // setTimeout(() => {
-      //   inputRef.current.disabled = false
-      //   inputRef.current.focus()
-      // }, 300)
       e.preventDefault()
       if (inputRef.current.innerText.length == 0) return
       setIsEditing(false)
@@ -63,7 +58,7 @@ export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, 
         spellCheck={false}
         contentEditable={isEditing}
         onInput={onTagNameChange}
-        onKeyDown={onKeydown}
+        onKeyPress={onKeyPress}
         isEditing={isEditing}
         placeholder={defaultValue}
       >
