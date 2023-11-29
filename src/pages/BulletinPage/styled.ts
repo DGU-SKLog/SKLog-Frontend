@@ -27,76 +27,18 @@ export const GreenTypo = styled.span`
   color: #01cb45;
   font-size: 12px;
 `
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 export const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: end;
   column-gap: 8px;
 `
 export const UpperWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
-export const TagSelectorWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  cursor: pointer;
-  z-index: 3;
-  margin-left: 24px;
-`
-export const TagTypo = styled.p`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 48px;
-  white-space: nowrap;
-`
-export const TagSelector = styled.div`
-  position: relative;
-  box-sizing: border-box;
-  padding: 15px 8px;
-  width: 209px;
-  height: 48px;
-  border-radius: 8px;
-  border: 1px solid #c6c6c6;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 18px;
-  color: #888888;
-`
-export const TagOptionWrapper = styled.div`
-  position: absolute;
-  top: 56px;
-  left: 0;
-  box-sizing: border-box;
-  padding: 6px 12px 6px 6px;
-  width: 209px;
-  height: 102px;
-  border-radius: 8px;
-  border: 1px solid #dddede;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  background-color: white;
-  z-index: 2;
-`
-export const TagOption = styled.button`
-  width: 191px;
-  height: 30px;
-  text-align: left;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 30px;
-  color: #888888;
-
-  &:hover {
-    border-radius: 5px;
-    background-color: #e2f9e9;
-    color: #01cb45;
-  }
-
-  &::before {
-    content: '# ';
-  }
 `
 export const DownArrowImg = styled.img`
   position: absolute;
@@ -153,4 +95,21 @@ export const QuestionBubble = styled.img`
   right: 30px;
   bottom: 30px;
   width: 80px;
+`
+export const HashTagContainer = styled.div`
+  display: flex;
+  column-gap: 3px;
+`
+export const AddHashTagButton = styled.button`
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  border: 1px solid #dddede;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  transform: rotate(15deg);
+  margin-right: 5px;
 `

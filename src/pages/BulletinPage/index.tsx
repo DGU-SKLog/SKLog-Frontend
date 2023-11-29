@@ -1,17 +1,13 @@
 import MDEditor from '@uiw/react-md-editor'
 import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import {
+  AddHashTagButton,
+  ButtonContainer,
   ButtonWrapper,
   CancelButton,
   CancelImg,
-  DownArrowImg,
-  QuestionBubble,
+  HashTagContainer,
   Root,
-  TagOption,
-  TagOptionWrapper,
-  TagSelector,
-  TagSelectorWrapper,
-  TagTypo,
   TitleInput,
   UpperWrapper,
   WriteTypo,
@@ -19,32 +15,23 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import downArrowImg from 'assets/images/right_arrow.png'
-import { examinfoTagList, suggestTagList } from 'constants/tagList'
 import { OrangeButton } from 'components/common/OrangeButton'
 import { SelectModal } from 'components/SelectModal'
 import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_bubble.svg'
 import { QuestionModal } from 'components/QuestionModal'
+import { HashTag } from 'components/HashTag'
 type BulletinPageProps = {
   mode: string
 }
-export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
+export const BulletinPage: FC<BulletinPageProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
-
   const [selectedText, setSelectedText] = useState('')
-  const tagList = (): string[] => {
-    if (mode === 'examinfo') return examinfoTagList
-    if (mode === 'suggest') return suggestTagList
-    else return []
-  }
-
-  const [isSelecting, setIsSelecting] = useState<boolean>(false)
-  const [selectedTag, setSelectedTag] = useState<string>('선택해주세요')
 
   const [inputValue, setInputValue] = useState<string>('')
+  const [hashTagList, setHashTagList] = useState<Array<string>>([])
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setInputValue(event.target.value)
   }
@@ -59,17 +46,8 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
   const onClickCancelButton = () => {
     navigate(-1)
   }
-  const onClickTagSelector = (e: React.MouseEvent) => {
-    setIsSelecting((prev) => !prev)
-    e.stopPropagation()
-  }
-  const onClickTagOption = (id: number) => (e: React.MouseEvent) => {
-    setSelectedTag(tagList()[id])
-    e.stopPropagation()
-    setIsSelecting(false)
-  }
+
   const onClickRoot = () => {
-    setIsSelecting(false)
     setIsQuestionModalOpen(false)
   }
 
@@ -84,10 +62,22 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       closeModal()
     }
   }
+
   const applyAIText = (content: string) => {
     const updatedValue = value.replace(selectedText, content)
     setValue(updatedValue)
     closeModal()
+  }
+  const addHashTag = () => {
+    setHashTagList((prev) => prev.concat(''))
+  }
+  const editHashTag = (idx: number, newTagName: string) => {
+    setHashTagList((prev) =>
+      prev.map((tagName, index) => {
+        if (idx == index) return newTagName
+        return tagName
+      })
+    )
   }
 
   useEffect(() => {
@@ -101,29 +91,15 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       window.removeEventListener('mousemove', handleMouseMove)
     }
   }, [])
+
+  useEffect(() => {
+    console.log(hashTagList)
+  }, [hashTagList])
   return (
     <Root onClick={onClickRoot}>
       <WriteTypo>글쓰기 ✏️</WriteTypo>
       <UpperWrapper>
         <TitleInput name="title" value={inputValue} onChange={onChange} placeholder="제목을 입력해주세요" />
-        {mode !== 'notice' && (
-          <TagSelectorWrapper>
-            <TagTypo>태그</TagTypo>
-            <TagSelector onClick={onClickTagSelector}>
-              {selectedTag === '선택해주세요' ? selectedTag : '# ' + selectedTag}
-              <DownArrowImg alt="down_arrow_img" src={downArrowImg} />
-              {isSelecting && (
-                <TagOptionWrapper>
-                  {tagList().map((tag, index) => (
-                    <TagOption key={index} onClick={onClickTagOption(index)}>
-                      {tag}
-                    </TagOption>
-                  ))}
-                </TagOptionWrapper>
-              )}
-            </TagSelector>
-          </TagSelectorWrapper>
-        )}
       </UpperWrapper>
 
       <MDEditor
@@ -146,14 +122,21 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
           <SelectModal closeModal={closeModal} content={selectedText} applyAIText={applyAIText} />
         </div>
       )}
-
-      <ButtonWrapper>
-        <CancelButton onClick={onClickCancelButton}>
-          <CancelImg />
-          취소
-        </CancelButton>
-        <OrangeButton content="등록" />
-      </ButtonWrapper>
+      <ButtonContainer>
+        <HashTagContainer>
+          <AddHashTagButton onClick={addHashTag}>#</AddHashTagButton>
+          {hashTagList.map((tagName, index) => (
+            <HashTag key={index} tagName={tagName} onChange={(newTagName: string) => editHashTag(index, newTagName)} />
+          ))}
+        </HashTagContainer>
+        <ButtonWrapper>
+          <CancelButton onClick={onClickCancelButton}>
+            <CancelImg />
+            취소
+          </CancelButton>
+          <OrangeButton content="등록" />
+        </ButtonWrapper>
+      </ButtonContainer>
       <QuestionBubbleImg
         fill="white"
         stroke="black"
