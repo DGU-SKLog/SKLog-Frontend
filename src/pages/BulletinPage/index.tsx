@@ -51,7 +51,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   const onClickRegisterButton = async () => {
     //
   }
-  const [contentValue, setValue] = useState('**내용을 입력해 주세요**')
+  const [contentValue, setValue] = useState('')
   const closeModal = () => {
     setIsModalOpen(false)
   }
