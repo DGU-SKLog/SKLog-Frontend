@@ -85,10 +85,9 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
     setHashTagList((prev) =>
       prev.concat({
         tagName: defaultValue,
-        key: hashTagId,
+        key: hashTagId++,
       })
     )
-    hashTagId++
   }
   const deleteHashTag = (index) => () => {
     setHashTagList((prev) => prev.filter((tag, idx) => idx != index))
