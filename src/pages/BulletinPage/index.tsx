@@ -28,7 +28,13 @@ import { Spinner } from 'components/Spinner'
 type BulletinPageProps = {
   mode: string
 }
+type HashTagType = {
+  tagName: string
+  key: number
+}
+let hashTagId = 0
 export const BulletinPage: FC<BulletinPageProps> = () => {
+  const generateUniqueKey = (tag, index) => `${tag}-${Date.now()}-${index}`
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
@@ -36,7 +42,8 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
   const [selectedText, setSelectedText] = useState('')
   const [titleValue, setTitleValue] = useState<string>('')
-  const [hashTagList, setHashTagList] = useState<Array<string>>([])
+  const [hashTagList, setHashTagList] = useState<Array<HashTagType>>([])
+  const defaultValue = 'HashTag'
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitleValue(event.target.value)
   }
@@ -74,13 +81,26 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
     closeModal()
   }
   const addHashTag = () => {
-    setHashTagList((prev) => prev.concat(''))
+    if (hashTagList.length > 2) return
+    setHashTagList((prev) =>
+      prev.concat({
+        tagName: defaultValue,
+        key: hashTagId,
+      })
+    )
+    hashTagId++
+  }
+  const deleteHashTag = (index) => () => {
+    setHashTagList((prev) => prev.filter((tag, idx) => idx != index))
   }
   const editHashTag = (idx: number, newTagName: string) => {
     setHashTagList((prev) =>
-      prev.map((tagName, index) => {
-        if (idx == index) return newTagName
-        return tagName
+      prev.map((tag, index) => {
+        if (idx == index) {
+          hashTagId++
+          return { tagName: newTagName, key: tag.key }
+        }
+        return tag
       })
     )
   }
@@ -91,7 +111,13 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
     })
       .then((res: CreateTitleResponseProps) => {
         setTitleValue(res.title)
-        setHashTagList(res.tags)
+
+        setHashTagList(
+          res.tags.map((tag) => {
+            hashTagId++
+            return { tagName: tag, key: hashTagId }
+          })
+        )
         setIsLoading(false)
       })
       .catch((e) => {
@@ -148,7 +174,13 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
         <HashTagContainer>
           <AddHashTagButton onClick={addHashTag}>#</AddHashTagButton>
           {hashTagList.map((tag, index) => (
-            <HashTag key={index} onChange={(newTagName: string) => editHashTag(index, newTagName)} />
+            <HashTag
+              key={tag.key}
+              onChange={(newTagName: string) => editHashTag(index, newTagName)}
+              addHashTag={addHashTag}
+              defaultValue={defaultValue}
+              deleteHashTag={deleteHashTag(index)}
+            />
           ))}
         </HashTagContainer>
         <ButtonWrapper>

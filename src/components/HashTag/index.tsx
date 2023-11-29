@@ -3,15 +3,28 @@ import { CancelButton, ButtonRoot, TagInput } from './styled'
 import CancelImg from 'assets/images/cancel.png'
 type HashTagProps = {
   onChange: (newTagName: string) => void
+  addHashTag: () => void
+  defaultValue: string
+  deleteHashTag: () => void
 }
 
-export const HashTag: FC<HashTagProps> = ({ onChange }) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, deleteHashTag }) => {
+  const [isEditing, setIsEditing] = useState<boolean>(true)
 
   const onKeydown = (e: React.KeyboardEvent) => {
+    if (inputRef.current.innerText == defaultValue) {
+      inputRef.current.innerText = ''
+    }
     if (e.key == ',' || e.key == 'Enter') {
+      inputRef.current.disabled = true
+      // setTimeout(() => {
+      //   inputRef.current.disabled = false
+      //   inputRef.current.focus()
+      // }, 300)
       e.preventDefault()
+      if (inputRef.current.innerText.length == 0) return
       setIsEditing(false)
+      addHashTag()
     }
   }
   const inputRef = useRef<HTMLInputElement>()
@@ -52,8 +65,18 @@ export const HashTag: FC<HashTagProps> = ({ onChange }) => {
         onInput={onTagNameChange}
         onKeyDown={onKeydown}
         isEditing={isEditing}
+        placeholder={defaultValue}
+      >
+        {defaultValue}
+      </TagInput>
+      <CancelButton
+        src={CancelImg}
+        alt="cancel_img"
+        onClick={(e) => {
+          e.stopPropagation()
+          deleteHashTag()
+        }}
       />
-      <CancelButton src={CancelImg} alt="cancel_img" />
     </ButtonRoot>
   )
 }
