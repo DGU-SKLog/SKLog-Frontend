@@ -13,6 +13,12 @@ export const ButtonRoot = styled.button`
   box-sizing: border-box;
   padding: 10px;
   column-gap: 3px;
+  &:hover {
+    filter: brightness(0.9);
+  }
+  &:active {
+    filter: brightness(1);
+  }
 `
 type TagInputProps = {
   isEditing: boolean
@@ -29,4 +35,13 @@ export const TagInput = styled.span<TagInputProps>`
 
 export const CancelButton = styled.img`
   width: 10px;
+  border-radius: 100%;
+  padding: 2px;
+  &:hover {
+    filter: brightness(0.9);
+    background-color: #d1d1d1;
+  }
+  &:active {
+    filter: brightness(1);
+  }
 `
