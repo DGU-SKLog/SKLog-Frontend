@@ -17,7 +17,7 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { FunctionButton } from 'components/common/OrangeButton'
+import { FunctionButton } from 'components/common/FunctionButton'
 import { SelectModal } from 'components/SelectModal'
 import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_bubble.svg'
 import { QuestionModal } from 'components/QuestionModal'
