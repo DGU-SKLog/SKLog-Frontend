@@ -8,7 +8,8 @@ export const CheckImg = styled.img`
   height: 16px;
 `
 export const Root = styled.button`
-  width: 96px;
+  width: max-content;
+  padding: 0 25px;
   height: 32px;
   border-radius: 100px;
   border: 1px solid #f39946;
