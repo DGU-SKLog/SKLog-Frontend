@@ -27,6 +27,8 @@ export const SelectModal: FC<SelectModalProps> = ({ content, closeModal, applyAI
         })
         .catch((e) => {
           console.error(e)
+          setIsLoading(false)
+          setApiResponse(e)
         })
     } else {
       setIsRequestModalOpen(true)

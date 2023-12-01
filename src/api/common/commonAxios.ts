@@ -41,6 +41,5 @@ export const axiosDELETE = <RequestData, ResponseData>(
 }
 axiosInstance.interceptors.request.use((config: any) => {
   const newConfig = { ...config }
-  console.log(newConfig)
   return newConfig
 })

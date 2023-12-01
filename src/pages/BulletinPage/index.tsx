@@ -1,17 +1,15 @@
 import MDEditor from '@uiw/react-md-editor'
 import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import {
+  AddHashTagButton,
+  ButtonContainer,
   ButtonWrapper,
   CancelButton,
   CancelImg,
-  DownArrowImg,
-  QuestionBubble,
+  HashTagContainer,
+  IconWrapper,
+  RobotIcon,
   Root,
-  TagOption,
-  TagOptionWrapper,
-  TagSelector,
-  TagSelectorWrapper,
-  TagTypo,
   TitleInput,
   UpperWrapper,
   WriteTypo,
@@ -19,57 +17,49 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import downArrowImg from 'assets/images/right_arrow.png'
-import { examinfoTagList, suggestTagList } from 'constants/tagList'
-import { OrangeButton } from 'components/common/OrangeButton'
+import { FunctionButton } from 'components/common/OrangeButton'
 import { SelectModal } from 'components/SelectModal'
 import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_bubble.svg'
 import { QuestionModal } from 'components/QuestionModal'
+import { HashTag } from 'components/HashTag'
+import RobotIconImg from 'assets/images/robot.svg'
+import { CreateTitleResponseProps, createTitle } from 'api/createTitle'
+import { Spinner } from 'components/Spinner'
+import { CheckCohesionResponseProps, checkCohesion } from 'api/checkCohesion'
 type BulletinPageProps = {
   mode: string
 }
-export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
+type HashTagType = {
+  tagName: string
+  key: number
+}
+let hashTagId = 0
+export const BulletinPage: FC<BulletinPageProps> = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
-
   const [selectedText, setSelectedText] = useState('')
-  const tagList = (): string[] => {
-    if (mode === 'examinfo') return examinfoTagList
-    if (mode === 'suggest') return suggestTagList
-    else return []
-  }
-
-  const [isSelecting, setIsSelecting] = useState<boolean>(false)
-  const [selectedTag, setSelectedTag] = useState<string>('선택해주세요')
-
-  const [inputValue, setInputValue] = useState<string>('')
+  const [titleValue, setTitleValue] = useState<string>('')
+  const [hashTagList, setHashTagList] = useState<Array<HashTagType>>([])
+  const defaultValue = ''
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value)
+    setTitleValue(event.target.value)
   }
   const navigate = useNavigate()
   const onClickRegisterButton = async () => {
     //
   }
-  const [value, setValue] = useState('**내용을 입력해 주세요**')
+  const [contentValue, setContentValue] = useState('')
   const closeModal = () => {
     setIsModalOpen(false)
   }
   const onClickCancelButton = () => {
     navigate(-1)
   }
-  const onClickTagSelector = (e: React.MouseEvent) => {
-    setIsSelecting((prev) => !prev)
-    e.stopPropagation()
-  }
-  const onClickTagOption = (id: number) => (e: React.MouseEvent) => {
-    setSelectedTag(tagList()[id])
-    e.stopPropagation()
-    setIsSelecting(false)
-  }
+
   const onClickRoot = () => {
-    setIsSelecting(false)
     setIsQuestionModalOpen(false)
   }
 
@@ -84,12 +74,55 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       closeModal()
     }
   }
+
   const applyAIText = (content: string) => {
-    const updatedValue = value.replace(selectedText, content)
-    setValue(updatedValue)
+    const updatedValue = contentValue.replace(selectedText, content)
+    setContentValue(updatedValue)
     closeModal()
   }
-
+  const addHashTag = () => {
+    if (hashTagList.length > 2) return
+    setHashTagList((prev) =>
+      prev.concat({
+        tagName: defaultValue,
+        key: hashTagId++,
+      })
+    )
+  }
+  const deleteHashTag = (index) => () => {
+    setHashTagList((prev) => prev.filter((tag, idx) => idx != index))
+  }
+  const editHashTag = (idx: number, newTagName: string) => {
+    setHashTagList((prev) =>
+      prev.map((tag, index) => {
+        if (idx == index) {
+          hashTagId++
+          return { tagName: newTagName, key: tag.key }
+        }
+        return tag
+      })
+    )
+  }
+  const onClickRobotIcon = () => {
+    setIsLoading(true)
+    createTitle({
+      content: titleValue,
+    })
+      .then((res: CreateTitleResponseProps) => {
+        setTitleValue(res.title)
+        setHashTagList(
+          res.tags.map((tag) => {
+            hashTagId++
+            return { tagName: tag, key: hashTagId }
+          })
+        )
+        setIsLoading(false)
+      })
+      .catch((e) => {
+        setIsLoading(false)
+        setTitleValue(e)
+      })
+  }
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
@@ -101,34 +134,36 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
       window.removeEventListener('mousemove', handleMouseMove)
     }
   }, [])
+
+  // useEffect(() => {
+  //   console.log(hashTagList)
+  // }, [hashTagList])
   return (
     <Root onClick={onClickRoot}>
       <WriteTypo>글쓰기 ✏️</WriteTypo>
+
       <UpperWrapper>
-        <TitleInput name="title" value={inputValue} onChange={onChange} placeholder="제목을 입력해주세요" />
-        {mode !== 'notice' && (
-          <TagSelectorWrapper>
-            <TagTypo>태그</TagTypo>
-            <TagSelector onClick={onClickTagSelector}>
-              {selectedTag === '선택해주세요' ? selectedTag : '# ' + selectedTag}
-              <DownArrowImg alt="down_arrow_img" src={downArrowImg} />
-              {isSelecting && (
-                <TagOptionWrapper>
-                  {tagList().map((tag, index) => (
-                    <TagOption key={index} onClick={onClickTagOption(index)}>
-                      {tag}
-                    </TagOption>
-                  ))}
-                </TagOptionWrapper>
-              )}
-            </TagSelector>
-          </TagSelectorWrapper>
-        )}
+        <HashTagContainer>
+          <AddHashTagButton onClick={addHashTag}>#</AddHashTagButton>
+          {hashTagList.map((tag, index) => (
+            <HashTag
+              key={tag.key}
+              onChange={(newTagName: string) => editHashTag(index, newTagName)}
+              addHashTag={addHashTag}
+              defaultValue={defaultValue}
+              deleteHashTag={deleteHashTag(index)}
+            />
+          ))}
+        </HashTagContainer>
+        <TitleInput name="title" value={titleValue} onChange={onChange} placeholder="제목을 입력해주세요" />
+        <IconWrapper>
+          {isLoading ? <Spinner /> : <RobotIcon src={RobotIconImg} alt="robot_icon" onClick={onClickRobotIcon} />}
+        </IconWrapper>
       </UpperWrapper>
 
       <MDEditor
-        value={value}
-        onChange={setValue}
+        value={contentValue}
+        onChange={setContentValue}
         data-color-mode="light"
         onSelect={onTextSelected}
         height={400}
@@ -146,14 +181,29 @@ export const BulletinPage: FC<BulletinPageProps> = ({ mode }) => {
           <SelectModal closeModal={closeModal} content={selectedText} applyAIText={applyAIText} />
         </div>
       )}
-
-      <ButtonWrapper>
-        <CancelButton onClick={onClickCancelButton}>
-          <CancelImg />
-          취소
-        </CancelButton>
-        <OrangeButton content="등록" />
-      </ButtonWrapper>
+      <ButtonContainer>
+        <ButtonWrapper>
+          <CancelButton onClick={onClickCancelButton}>
+            <CancelImg />
+            취소
+          </CancelButton>
+          <FunctionButton content="등록" onClick={onClickRegisterButton} />
+          <FunctionButton
+            content="문장 통일성 검사"
+            onClick={() => {
+              checkCohesion({
+                content: contentValue,
+              })
+                .then((res: CheckCohesionResponseProps) => {
+                  setContentValue(res.content)
+                })
+                .catch((err) => {
+                  console.error(err)
+                })
+            }}
+          />
+        </ButtonWrapper>
+      </ButtonContainer>
       <QuestionBubbleImg
         fill="white"
         stroke="black"
