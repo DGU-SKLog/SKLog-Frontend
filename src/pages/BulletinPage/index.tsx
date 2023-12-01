@@ -17,7 +17,7 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { OrangeButton } from 'components/common/OrangeButton'
+import { FunctionButton } from 'components/common/OrangeButton'
 import { SelectModal } from 'components/SelectModal'
 import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_bubble.svg'
 import { QuestionModal } from 'components/QuestionModal'
@@ -25,6 +25,7 @@ import { HashTag } from 'components/HashTag'
 import RobotIconImg from 'assets/images/robot.svg'
 import { CreateTitleResponseProps, createTitle } from 'api/createTitle'
 import { Spinner } from 'components/Spinner'
+import { CheckCohesionResponseProps, checkCohesion } from 'api/checkCohesion'
 type BulletinPageProps = {
   mode: string
 }
@@ -34,7 +35,6 @@ type HashTagType = {
 }
 let hashTagId = 0
 export const BulletinPage: FC<BulletinPageProps> = () => {
-  const generateUniqueKey = (tag, index) => `${tag}-${Date.now()}-${index}`
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
@@ -51,7 +51,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   const onClickRegisterButton = async () => {
     //
   }
-  const [contentValue, setValue] = useState('')
+  const [contentValue, setContentValue] = useState('')
   const closeModal = () => {
     setIsModalOpen(false)
   }
@@ -77,7 +77,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
 
   const applyAIText = (content: string) => {
     const updatedValue = contentValue.replace(selectedText, content)
-    setValue(updatedValue)
+    setContentValue(updatedValue)
     closeModal()
   }
   const addHashTag = () => {
@@ -110,7 +110,6 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
     })
       .then((res: CreateTitleResponseProps) => {
         setTitleValue(res.title)
-
         setHashTagList(
           res.tags.map((tag) => {
             hashTagId++
@@ -120,7 +119,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
         setIsLoading(false)
       })
       .catch((e) => {
-        setIsLoading(true)
+        setIsLoading(false)
         setTitleValue(e)
       })
   }
@@ -142,7 +141,20 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   return (
     <Root onClick={onClickRoot}>
       <WriteTypo>글쓰기 ✏️</WriteTypo>
+
       <UpperWrapper>
+        <HashTagContainer>
+          <AddHashTagButton onClick={addHashTag}>#</AddHashTagButton>
+          {hashTagList.map((tag, index) => (
+            <HashTag
+              key={tag.key}
+              onChange={(newTagName: string) => editHashTag(index, newTagName)}
+              addHashTag={addHashTag}
+              defaultValue={defaultValue}
+              deleteHashTag={deleteHashTag(index)}
+            />
+          ))}
+        </HashTagContainer>
         <TitleInput name="title" value={titleValue} onChange={onChange} placeholder="제목을 입력해주세요" />
         <IconWrapper>
           {isLoading ? <Spinner /> : <RobotIcon src={RobotIconImg} alt="robot_icon" onClick={onClickRobotIcon} />}
@@ -151,7 +163,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
 
       <MDEditor
         value={contentValue}
-        onChange={setValue}
+        onChange={setContentValue}
         data-color-mode="light"
         onSelect={onTextSelected}
         height={400}
@@ -170,24 +182,26 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
         </div>
       )}
       <ButtonContainer>
-        <HashTagContainer>
-          <AddHashTagButton onClick={addHashTag}>#</AddHashTagButton>
-          {hashTagList.map((tag, index) => (
-            <HashTag
-              key={tag.key}
-              onChange={(newTagName: string) => editHashTag(index, newTagName)}
-              addHashTag={addHashTag}
-              defaultValue={defaultValue}
-              deleteHashTag={deleteHashTag(index)}
-            />
-          ))}
-        </HashTagContainer>
         <ButtonWrapper>
           <CancelButton onClick={onClickCancelButton}>
             <CancelImg />
             취소
           </CancelButton>
-          <OrangeButton content="등록" />
+          <FunctionButton content="등록" onClick={onClickRegisterButton} />
+          <FunctionButton
+            content="문장 통일성 검사"
+            onClick={() => {
+              checkCohesion({
+                content: contentValue,
+              })
+                .then((res: CheckCohesionResponseProps) => {
+                  setContentValue(res.content)
+                })
+                .catch((err) => {
+                  console.error(err)
+                })
+            }}
+          />
         </ButtonWrapper>
       </ButtonContainer>
       <QuestionBubbleImg

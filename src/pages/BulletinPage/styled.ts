@@ -100,6 +100,9 @@ export const QuestionBubble = styled.img`
   width: 80px;
 `
 export const HashTagContainer = styled.div`
+  position: absolute;
+  top: -40px;
+  right: 0;
   display: flex;
   column-gap: 3px;
 `
@@ -115,6 +118,12 @@ export const AddHashTagButton = styled.button`
   color: gray;
   transform: rotate(15deg);
   margin-right: 5px;
+  &:hover {
+    filter: brightness(0.9);
+  }
+  &:active {
+    filter: brightness(1);
+  }
 `
 export const RobotIcon = styled.img`
   width: 30px;
