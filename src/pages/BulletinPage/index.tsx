@@ -26,6 +26,7 @@ import RobotIconImg from 'assets/images/robot.svg'
 import { CreateTitleResponseProps, createTitle } from 'api/createTitle'
 import { Spinner } from 'components/Spinner'
 import { CheckCohesionResponseProps, checkCohesion } from 'api/checkCohesion'
+import { RequestModal } from 'components/RequestModal'
 type BulletinPageProps = {
   mode: string
 }
@@ -36,13 +37,16 @@ type HashTagType = {
 let hashTagId = 0
 export const BulletinPage: FC<BulletinPageProps> = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false) // 모달 표시 상태
+  const [isCohesionLoading, setIsCohesionLoading] = useState(false)
+  const [isSelectModalOpen, setIsSelectModalOpen] = useState(false) // 모달 표시 상태
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false) // 모달 표시 상태
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false) // 모달 표시 상태
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
   const [selectedText, setSelectedText] = useState('')
   const [titleValue, setTitleValue] = useState<string>('')
   const [hashTagList, setHashTagList] = useState<Array<HashTagType>>([])
+  const [cohesionResponse, setCohesionResponse] = useState('')
   const defaultValue = ''
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitleValue(event.target.value)
@@ -53,7 +57,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   }
   const [contentValue, setContentValue] = useState('')
   const closeModal = () => {
-    setIsModalOpen(false)
+    setIsSelectModalOpen(false)
   }
   const onClickCancelButton = () => {
     navigate(-1)
@@ -69,7 +73,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
       // 선택된 텍스트의 바로 아래에 모달을 띄우기 위한 위치를 계산합니다.
       setSelectedText(selection.toString())
       setModalPosition(mousePosition)
-      setIsModalOpen(true) // 모달창을 보여줍니다.
+      setIsSelectModalOpen(true) // 모달창을 보여줍니다.
     } else {
       closeModal()
     }
@@ -79,6 +83,9 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
     const updatedValue = contentValue.replace(selectedText, content)
     setContentValue(updatedValue)
     closeModal()
+  }
+  const applyCohesionResponse = (response: string) => {
+    setContentValue(response)
   }
   const addHashTag = () => {
     if (hashTagList.length > 2) return
@@ -171,7 +178,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
         visibleDragbar={false}
         highlightEnable={false}
       />
-      {isModalOpen && (
+      {isSelectModalOpen && (
         <div
           style={{
             position: 'absolute',
@@ -192,11 +199,14 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
           <FunctionButton
             content="문장 통일성 검사"
             onClick={() => {
+              setIsRequestModalOpen(true)
+              setIsCohesionLoading(true)
               checkCohesion({
                 content: contentValue,
               })
                 .then((res: CheckCohesionResponseProps) => {
-                  setContentValue(res.content)
+                  setIsCohesionLoading(false)
+                  setCohesionResponse(res.content)
                 })
                 .catch((err) => {
                   console.error(err)
@@ -216,6 +226,17 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
         style={{ position: 'fixed', right: 80, bottom: 30, cursor: 'pointer' }}
       />
       {isQuestionModalOpen && <QuestionModal closeModal={closeModal} />}
+      {isRequestModalOpen && (
+        <RequestModal
+          closeModal={() => {
+            setIsRequestModalOpen(false)
+          }}
+          content={contentValue}
+          applyAIText={applyCohesionResponse}
+          response={cohesionResponse}
+          isLoading={isCohesionLoading}
+        />
+      )}
     </Root>
   )
 }
