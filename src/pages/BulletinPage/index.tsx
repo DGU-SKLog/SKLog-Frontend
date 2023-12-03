@@ -106,9 +106,10 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
   const onClickRobotIcon = () => {
     setIsLoading(true)
     createTitle({
-      content: titleValue,
+      content: contentValue,
     })
       .then((res: CreateTitleResponseProps) => {
+        console.log(res)
         setTitleValue(res.title)
         setHashTagList(
           res.tags.map((tag) => {
