@@ -6,25 +6,26 @@ type HashTagProps = {
   addHashTag: () => void
   defaultValue: string
   deleteHashTag: () => void
+  isApi: boolean
 }
 
-export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, deleteHashTag }) => {
-  const [isEditing, setIsEditing] = useState<boolean>(true)
-
+export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, deleteHashTag, isApi }) => {
+  const [isEditing, setIsEditing] = useState<boolean>(!isApi)
+  const [contentValue, setContentValue] = useState(defaultValue)
   const onKeyPress = (e: React.KeyboardEvent) => {
-    if (inputRef.current.innerText == defaultValue) {
-      inputRef.current.innerText = ''
-    }
     if (e.key == ',' || e.key == 'Enter') {
       e.preventDefault()
       if (inputRef.current.innerText.length == 0) return
       setIsEditing(false)
       addHashTag()
+    } else {
+      setContentValue(inputRef.current.innerText)
     }
   }
   const inputRef = useRef<HTMLInputElement>()
   const onTagNameChange = (e: ChangeEvent<HTMLSpanElement>) => {
     const text = e.target.innerText
+
     if (text.length > 10) {
       // 현재 커서 위치 저장
       const selection = window.getSelection()
@@ -40,7 +41,9 @@ export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, 
       newRange.setEnd(e.target.firstChild, cursorPosition)
       selection.removeAllRanges()
       selection.addRange(newRange)
-    } else onChange(text) // 부모 컴포넌트에 변경사항 전달
+    } else {
+      onChange(text) // 부모 컴포넌트에 변경사항 전달
+    }
   }
   useEffect(() => {
     if (isEditing) inputRef?.current?.focus()
@@ -59,10 +62,10 @@ export const HashTag: FC<HashTagProps> = ({ onChange, addHashTag, defaultValue, 
         contentEditable={isEditing}
         onInput={onTagNameChange}
         onKeyPress={onKeyPress}
+        // onKeyDown={onKeyPress}
         isEditing={isEditing}
-        placeholder={defaultValue}
       >
-        {defaultValue}
+        {contentValue}
       </TagInput>
       <CancelButton
         src={CancelImg}

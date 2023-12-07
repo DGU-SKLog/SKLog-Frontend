@@ -33,6 +33,7 @@ type BulletinPageProps = {
 type HashTagType = {
   tagName: string
   key: number
+  isApi: boolean
 }
 let hashTagId = 0
 export const BulletinPage: FC<BulletinPageProps> = () => {
@@ -93,6 +94,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
       prev.concat({
         tagName: defaultValue,
         key: hashTagId++,
+        isApi: false,
       })
     )
   }
@@ -104,7 +106,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
       prev.map((tag, index) => {
         if (idx == index) {
           hashTagId++
-          return { tagName: newTagName, key: tag.key }
+          return { tagName: newTagName, key: tag.key, isApi: false }
         }
         return tag
       })
@@ -121,7 +123,7 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
         setHashTagList(
           res.tags.map((tag) => {
             hashTagId++
-            return { tagName: tag, key: hashTagId }
+            return { tagName: tag, key: hashTagId, isApi: true }
           })
         )
         setIsLoading(false)
@@ -158,8 +160,9 @@ export const BulletinPage: FC<BulletinPageProps> = () => {
               key={tag.key}
               onChange={(newTagName: string) => editHashTag(index, newTagName)}
               addHashTag={addHashTag}
-              defaultValue={defaultValue}
+              defaultValue={tag.tagName}
               deleteHashTag={deleteHashTag(index)}
+              isApi={tag.isApi}
             />
           ))}
         </HashTagContainer>
