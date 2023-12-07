@@ -144,7 +144,7 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
                   <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
                 )}
                 <CancelButton onClick={onClickCancelButton}>취소</CancelButton>
-                <ClearButton onClick={onClickClearButton}>새 질문</ClearButton>
+                {/* <ClearButton onClick={onClickClearButton}>새 질문</ClearButton> */}
               </ButtonContainer>
             )}
           </RightContainer>

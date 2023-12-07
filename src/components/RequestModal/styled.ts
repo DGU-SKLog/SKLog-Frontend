@@ -83,7 +83,7 @@ export const ButtonContainer = styled.div`
   bottom: 0px;
   display: flex;
   justify-content: center;
-  column-gap: 25px;
+  column-gap: 80px;
 `
 export const ApplyButton = styled(ButtonFormat)`
   border: 2px solid #7389c1;
