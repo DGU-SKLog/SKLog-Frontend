@@ -136,15 +136,17 @@ export const RequestModal: FC<RequestModalProps> = ({ closeModal, content, apply
               <MarkdownPreview source={apiResponse} wrapperElement={{ 'data-color-mode': 'light' }} />
             )}
 
-            <ButtonContainer>
-              {isEditing ? (
-                <ApplyEditButton onClick={onClickApplyEditButton}>수정</ApplyEditButton>
-              ) : (
-                <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
-              )}
-              <CancelButton onClick={onClickCancelButton}>취소</CancelButton>
-              <ClearButton onClick={onClickClearButton}>새 질문</ClearButton>
-            </ButtonContainer>
+            {apiResponse !== '' && !isLoading && (
+              <ButtonContainer>
+                {isEditing ? (
+                  <ApplyEditButton onClick={onClickApplyEditButton}>수정</ApplyEditButton>
+                ) : (
+                  <ApplyButton onClick={onClickApplyButton}>적용</ApplyButton>
+                )}
+                <CancelButton onClick={onClickCancelButton}>취소</CancelButton>
+                <ClearButton onClick={onClickClearButton}>새 질문</ClearButton>
+              </ButtonContainer>
+            )}
           </RightContainer>
         </CenterContainer>
       </Root>

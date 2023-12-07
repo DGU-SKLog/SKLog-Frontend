@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 import cancelImg from 'assets/images/cancel.png'
-type RobotIconProps = {
-  isRobotHovered: boolean
-}
+
 export const Root = styled.div`
   display: flex;
   flex-direction: column;

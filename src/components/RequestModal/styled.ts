@@ -63,7 +63,6 @@ export const RightContainer = styled.div`
   padding: 25px;
   width: 400px;
   height: 400px;
-  position: relative;
   flex-basis: 0; // 늘어남 기준점을 0으로 설정
   flex-grow: 1; // 빈 공간에 대해 동일한 비율로 늘어나도록 설정
   overflow-y: scroll;
@@ -79,10 +78,9 @@ const ButtonFormat = styled.button`
   border-radius: 10px;
 `
 export const ButtonContainer = styled.div`
-  position: absolute;
-  transform: translate(-50%);
+  position: sticky;
   left: 50%;
-  bottom: 23px;
+  bottom: 0px;
   display: flex;
   justify-content: center;
   column-gap: 25px;
