@@ -2,12 +2,14 @@ import { ChangeEvent, FC, KeyboardEventHandler, useEffect, useRef, useState } fr
 import { ClearButton, LowerContainer, RequestInput, Root, UpperContainer } from './styled'
 import { CreateQuestionResponseProps, createQuestion } from 'api/createQuestion'
 import { ReactComponent as QuestionBubbleImg } from 'assets/images/question_circle.svg'
+import { Spinner } from 'components/Spinner'
 
 type QuestionModalProps = {
   closeModal: () => void
 }
 
 export const QuestionModal: FC<QuestionModalProps> = ({ closeModal }) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [inputValue, setInputValue] = useState<string>('')
   const [apiResponse, setApiResponse] = useState('')
   const inputRef = useRef<HTMLInputElement>()
@@ -24,14 +26,17 @@ export const QuestionModal: FC<QuestionModalProps> = ({ closeModal }) => {
     }
   }
   const onClickQuestionButton = () => {
+    setIsLoading(true)
     createQuestion({ question: inputValue })
       .then((res: CreateQuestionResponseProps) => {
         setInputValue('')
         setApiResponse(res.answer)
+        setIsLoading(false)
       })
       .catch((e) => {
         setInputValue('')
         setApiResponse('API 오류')
+        setIsLoading(false)
       })
   }
   const onClickClearButton = () => {
@@ -64,7 +69,7 @@ export const QuestionModal: FC<QuestionModalProps> = ({ closeModal }) => {
         />
       </UpperContainer>
       <LowerContainer>
-        {apiResponse}
+        {isLoading ? <Spinner /> : apiResponse}
         <ClearButton onClick={onClickClearButton}>초기화</ClearButton>
       </LowerContainer>
     </Root>

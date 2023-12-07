@@ -68,7 +68,7 @@ export const LowerContainer = styled.div`
   }
   box-sizing: border-box;
   width: 100%;
-  padding: 10px 25px;
+  padding: 15px 18px;
   position: relative;
   flex-basis: 0; // 늘어남 기준점을 0으로 설정
   flex-grow: 1; // 빈 공간에 대해 동일한 비율로 늘어나도록 설정
