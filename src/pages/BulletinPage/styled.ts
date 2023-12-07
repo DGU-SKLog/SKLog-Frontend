@@ -29,7 +29,7 @@ export const GreenTypo = styled.span`
 `
 export const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
 `
 export const ButtonWrapper = styled.div`
   display: flex;
